@@ -1,4 +1,5 @@
 ﻿using br.seumanoel.empacotamento.api.Models.Dto;
+using br.seumanoel.empacotamento.api.Models.ErrorResponse;
 using br.seumanoel.empacotamento.api.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,20 +42,16 @@ namespace br.seumanoel.empacotamento.api.Controllers
         [HttpPost("account")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(TokenResponseDto)))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = (typeof(LoginErrorResponse)))]
         public async Task<IActionResult> Login([FromBody] LoginDto login)
         {
-            if (login == null || string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
+            if (login == null || string.IsNullOrEmpty(login.Username)
+                              || string.IsNullOrEmpty(login.Password))
             {
                 return BadRequest("Username and password are required.");
             }
-            // Only example
-            if (login.Username == "l2devjr" && login.Password == "senha123")
-            {
-                return Ok(new { token = GenerateJwtToken(login.Username) });
-            }
 
-            // Validação real
+            // Validation
             var user = await _authService.AuthenticateAsync(login.Username, login.Password);
             if (user != null)
             {
@@ -77,7 +74,8 @@ namespace br.seumanoel.empacotamento.api.Controllers
                 new Claim(ClaimTypes.Name, username)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                                    Environment.GetEnvironmentVariable("JWT_KEY")));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(

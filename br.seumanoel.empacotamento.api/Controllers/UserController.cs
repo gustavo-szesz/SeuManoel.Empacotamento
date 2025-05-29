@@ -38,7 +38,7 @@ namespace br.seumanoel.empacotamento.api.Controllers
         /// <response code="201">Returns the created user ID and username.</response>
         /// <response code="400">Return BadRequest if user already exists.</response>
         [ProducesResponseType(StatusCodes.Status201Created, Type = (typeof(UserDto)))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = (typeof(UserErrorResponse)))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = (typeof(CreationUserErrorResponse)))]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] User user)
         {
