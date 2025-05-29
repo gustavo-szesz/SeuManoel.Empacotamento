@@ -1,6 +1,9 @@
 using br.seumanoel.empacotamento.api.Models;
 using br.seumanoel.empacotamento.api.Models.Dto;
 using br.seumanoel.empacotamento.api.Service;
+using br.seumanoel.empacotamento.api.Interfaces;
+using br.seumanoel.empacotamento.api.Factorie;
+using Moq;
 using System.Collections.Generic;
 using Xunit;
 
@@ -9,18 +12,13 @@ namespace br.seumanoel.empacotamento.tests
     public class PackingServiceTests
     {
         private readonly PackingService _packingService;
-        private readonly List<Box> _boxes;
 
         public PackingServiceTests()
         {
-            _boxes = new List<Box>
-            {
-                new Box(30, 40, 80, "Caixa 1"), //96000 volume
-                new Box(80, 50, 40, "Caixa 2"), //160000 volume
-                new Box(50, 80, 60, "Caixa 3")  //240000 volume
-            };
-
-            _packingService = new PackingService((api.Interfaces.IBoxFactory)_boxes);
+            
+            var boxFactory = new BoxFactory();
+            
+            _packingService = new PackingService(boxFactory);
         }
 
         [Fact]

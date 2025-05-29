@@ -14,14 +14,15 @@ namespace br.seumanoel.empacotamento.tests
 {
     public class PackingControllerTests
     {
-        private readonly Mock<PackingService> _packingServiceMock;
+        private readonly PackingService _packingService;
         private readonly AppDbContext _context;
         private readonly PackingController _controller;
 
         public PackingControllerTests()
         {
-            // Create mock packing service
-            _packingServiceMock = new Mock<PackingService>(new List<Box>());
+            // Create the packing service directly instead of mocking it
+            // If you need to control its behavior, use a mock for IBoxFactory instead
+            _packingService = new PackingService(new api.Factorie.BoxFactory());
             
             // Set up in-memory database for testing
             var options = new DbContextOptionsBuilder<AppDbContext>()
@@ -34,7 +35,7 @@ namespace br.seumanoel.empacotamento.tests
             _context.Database.EnsureCreated();
             
             // Create the controller with our dependencies
-            _controller = new PackingController(_packingServiceMock.Object, _context);
+            _controller = new PackingController(_packingService, _context);
         }
 
         [Fact]
@@ -60,32 +61,13 @@ namespace br.seumanoel.empacotamento.tests
                 }
             };
 
-            var expectedResult = new List<OrderPackedDto>
-            {
-                new OrderPackedDto
-                {
-                    OrderId = 1,
-                    Boxes = new List<PackedBoxDto>
-                    {
-                        new PackedBoxDto
-                        {
-                            BoxName = "Caixa 1",
-                            PackedProductIds = new List<string> { "Test1" }
-                        }
-                    }
-                }
-            };
-
-            _packingServiceMock.Setup(s => s.PackOrders(It.IsAny<List<OrderDto>>()))
-                .Returns(expectedResult);
-
             // Act
             var result = await _controller.PackGroupedOrders(input);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var returnValue = Assert.IsAssignableFrom<List<OrderPackedDto>>(okResult.Value);
-            Assert.Equal(expectedResult, returnValue);
+            Assert.Equal(1, returnValue[0].OrderId);
             
             // Verify database was updated
             var dbResults = await _context.PackingResults.Include(p => p.Boxes).ToListAsync();
@@ -114,26 +96,6 @@ namespace br.seumanoel.empacotamento.tests
                     }
                 }
             };
-
-            var serviceResult = new List<OrderPackedDto>
-            {
-                new OrderPackedDto
-                {
-                    OrderId = 5,
-                    Boxes = new List<PackedBoxDto>
-                    {
-                        new PackedBoxDto
-                        {
-                            BoxName = null,
-                            PackedProductIds = new List<string> { "Cadeira Gamer" },
-                            Observation = "Produto não cabe em nenhuma caixa disponível."
-                        }
-                    }
-                }
-            };
-
-            _packingServiceMock.Setup(s => s.PackOrders(It.IsAny<List<OrderDto>>()))
-                .Returns(serviceResult);
 
             // Act
             var result = await _controller.PackGroupedOrders(input);

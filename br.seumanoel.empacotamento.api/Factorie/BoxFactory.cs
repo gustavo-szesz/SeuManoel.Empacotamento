@@ -2,7 +2,7 @@
 using br.seumanoel.empacotamento.api.Models;
 using br.seumanoel.empacotamento.api.Models.Enums;
 
-namespace br.seumanoel.empacotamento.api.Factories
+namespace br.seumanoel.empacotamento.api.Factorie
 {
     public class BoxFactory : IBoxFactory
     {

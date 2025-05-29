@@ -1,6 +1,6 @@
 
 using br.seumanoel.empacotamento.api.Data;
-using br.seumanoel.empacotamento.api.Factories;
+using br.seumanoel.empacotamento.api.Factorie;
 using br.seumanoel.empacotamento.api.Interfaces;
 using br.seumanoel.empacotamento.api.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
