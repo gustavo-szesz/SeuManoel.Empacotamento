@@ -13,27 +13,6 @@ namespace br.seumanoel.empacotamento.api.Controllers
     [Route("[controller]")]
     public class PackingController : ControllerBase
     {
-        private static readonly List<Box> Boxes = new()
-        {
-            new Box(30, 40, 80, "Caixa 1"), //96000 volume
-            new Box(80, 50, 40, "Caixa 2"), //160000 volume
-            new Box(50, 80, 60, "Caixa 3")  // 240000 volume
-        };
-
-        private static List<Order> MapToOrders(List<OrderDto> orderDtos)
-        {
-            return orderDtos.Select(o => new Order(
-                o.OrderId,
-                o.Products.Select(p => new Product(
-                    p.ProductId,
-                    p.Dimensions.Height,
-                    p.Dimensions.Width,
-                    p.Dimensions.Length
-                )).ToList()
-            )
-            { OrderId = o.OrderId }).ToList();
-        }
-
 
         private readonly AppDbContext _context;
         private readonly PackingService _packingService;
@@ -44,15 +23,17 @@ namespace br.seumanoel.empacotamento.api.Controllers
             _context = context;
         }
 
-        [HttpPost("packing")]
+
+        [HttpPost("packing-input")]
         public async Task<ActionResult<List<OrderPackedDto>>> PackGroupedOrders([FromBody] OrdersInputDto input)
         {
             if (input?.Orders == null)
                 return BadRequest("Campo 'pedidos' é obrigatório.");
 
+            // Get the packing results - this maintains null boxName values in the DTO
             var result = _packingService.PackOrders(input.Orders);
 
-            // Mapeia e salva no banco
+            // Mapeia e salva no banco - here we handle the database constraint
             foreach (var orderPacked in result)
             {
                 var packingResult = new PackingResult
@@ -60,7 +41,8 @@ namespace br.seumanoel.empacotamento.api.Controllers
                     OrderId = orderPacked.OrderId,
                     Boxes = orderPacked.Boxes.Select(box => new PackedBox
                     {
-                        BoxName = box.BoxName,
+                        // For database: use "Produto sem caixa" when null
+                        BoxName = box.BoxName ?? "Produto sem caixa",
                         Observation = box.Observation,
                         Products = box.PackedProductIds.Select(pid => new PackedProduct
                         {
@@ -74,8 +56,11 @@ namespace br.seumanoel.empacotamento.api.Controllers
 
             await _context.SaveChangesAsync();
 
+            // Return the original result (with null values intact) to match expected output
             return Ok(result);
         }
+
+
 
 
     }

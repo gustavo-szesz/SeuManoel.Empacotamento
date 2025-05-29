@@ -4,6 +4,10 @@ services:
     build:
       context: .
       dockerfile: br.seumanoel.empacotamento.api/Dockerfile
+    environment:
+      - DB_CONNECTION=Server=localhost,1433;Database=EmpacotamentoDb;User Id=sa;Password=SuaSenhaSuperForte123!;TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
 
 
   sqlserver:
@@ -25,5 +29,3 @@ networks:
 
 volumes:
   sqlserver_data:
-
-

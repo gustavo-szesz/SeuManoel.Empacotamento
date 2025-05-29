@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using br.seumanoel.empacotamento.api.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace br.seumanoel.empacotamento.api
@@ -25,12 +24,12 @@ namespace br.seumanoel.empacotamento.api
 
 
 
-            // Add services to the container.
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(Environment.GetEnvironmentVariable("DB_CONNECTION") ??
-                    "Server=sqlserver,1433;Database=EmpacotamentoDb;User Id=sa;Password=SuaSenhaSuperForte123!;TrustServerCertificate=True;");
+                options.UseSqlServer(Environment.GetEnvironmentVariable("DB_CONNECTION"));
             });
+
+
 
             builder.Services.AddScoped<AuthService>();
 
