@@ -26,10 +26,9 @@
             return p.Height <= Height &&
                    p.Width <= Width &&
                    p.Length <= Length &&
-                   p.Height * p.Width * p.Length + RemainingVolume >= Volume;
+                   p.CalculateVolume() <= RemainingVolume;
         }
 
         public void AddProduct(Product p) => Products.Add(p);
-
     }
 }

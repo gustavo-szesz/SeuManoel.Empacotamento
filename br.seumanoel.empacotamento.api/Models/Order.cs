@@ -1,9 +1,16 @@
-﻿namespace br.seumanoel.empacotamento.api.Models
+﻿using System.Text.Json.Serialization;
+
+namespace br.seumanoel.empacotamento.api.Models
 {
     public class Order
     {
         public int Id { get; set; }
-        public List<Product> Products { get; private set; }
+
+        [JsonPropertyName("produtos")]
+        public List<Product> Products { get; set; }
+
+        [JsonPropertyName("pedido_id")]
+        public int OrderId { get; set; }
 
         public Order(int id, List<Product> products)
         {

@@ -1,0 +1,29 @@
+services:
+  br.seumanoel.empacotamento.api:
+    image: ${DOCKER_REGISTRY-}brseumanoelempacotamentoapi
+    build:
+      context: .
+      dockerfile: br.seumanoel.empacotamento.api/Dockerfile
+
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=SuaSenhaSuperForte123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    restart: unless-stopped
+
+networks:
+      default:
+        driver: bridge
+
+
+volumes:
+  sqlserver_data:
+
+
