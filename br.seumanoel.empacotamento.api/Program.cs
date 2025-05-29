@@ -1,4 +1,3 @@
-
 using br.seumanoel.empacotamento.api.Data;
 using br.seumanoel.empacotamento.api.Factorie;
 using br.seumanoel.empacotamento.api.Interfaces;
@@ -8,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace br.seumanoel.empacotamento.api
 {
@@ -15,6 +15,7 @@ namespace br.seumanoel.empacotamento.api
     {
         public static void Main(string[] args)
         {
+            // Load env vars from .env file
             DotNetEnv.Env.Load();
             var key = Environment.GetEnvironmentVariable("JWT_KEY");
             var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
@@ -22,21 +23,17 @@ namespace br.seumanoel.empacotamento.api
 
             var builder = WebApplication.CreateBuilder(args);
 
-
-
+            #region  SQL Server 
+            // add DbContext to the service 
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
+                // DB_CONNECTION is a envoriment var
                 options.UseSqlServer(Environment.GetEnvironmentVariable("DB_CONNECTION"));
             });
+            #endregion
 
-
-
+            #region  Autentication JWT
             builder.Services.AddScoped<AuthService>();
-
-
-
-
-
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -52,49 +49,64 @@ namespace br.seumanoel.empacotamento.api
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = issuer,
                     ValidAudience = audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)) 
                 };
             });
+            #endregion
 
+            #region  Import Controllers and Services
             builder.Services.AddControllers();
-            builder.Services.AddScoped<AuthService>();
-
             builder.Services.AddScoped<IBoxFactory, BoxFactory>();
             builder.Services.AddScoped<PackingService>();
+            #endregion
 
+            #region  Swagger
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
+            builder.Services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Empacotamento API",
+                    Title = "Seu Manoel Empacotamento API - Teste técnico",
                     Version = "v1",
-                    Description = "API para gerenciamento de caixas para empacotamento"
+                    Description = "API Packing Seu Manoel",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Gustavo Henrique Szesz",
+                        Email = "szeszgutavo@gmail.com",
+                    }
                 });
-
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                
+                // add XML comments on Swagger
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
+                
+                // add JWT authentication to Swagger
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "JWT Authorization header usando o esquema Bearer. Exemplo: 'Bearer {token}'",
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
                     {
-                           {
-                               new OpenApiSecurityScheme
-                               {
-                                   Reference = new OpenApiReference
-                                   {
-                                       Type = ReferenceType.SecurityScheme,
-                                       Id = "Bearer"
-                                   }
-                               },
-                               new string[] {}
-                           }
-                    });
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
+            #endregion
 
             var app = builder.Build();
 
