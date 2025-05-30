@@ -5,10 +5,15 @@ services:
       context: .
       dockerfile: br.seumanoel.empacotamento.api/Dockerfile
     environment:
-      - DB_CONNECTION=Server=localhost,1433;Database=EmpacotamentoDb;User Id=sa;Password=SuaSenhaSuperForte123!;TrustServerCertificate=True;
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_HTTP_PORTS=8080
+    env_file:
+      - .env
     depends_on:
       - sqlserver
-
+    ports:
+      - "5000:8080"  # HTTP port map to 5000
+    restart: unless-stopped
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -23,9 +28,8 @@ services:
     restart: unless-stopped
 
 networks:
-      default:
-        driver: bridge
-
+  default:
+    driver: bridge
 
 volumes:
   sqlserver_data:
