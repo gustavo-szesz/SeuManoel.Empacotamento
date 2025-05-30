@@ -19,11 +19,5 @@
             Products = products;
             RemainingVolume = height * width * length;
         }
-
-        public bool IsSpaceAvailable(Product product)
-        {
-            return product.CalculateVolume() <= RemainingVolume;
-        }
-
     }
 }

@@ -1,6 +1,6 @@
 using br.seumanoel.empacotamento.api.Models;
 using br.seumanoel.empacotamento.api.Models.Dto;
-using br.seumanoel.empacotamento.api.Service;
+using br.seumanoel.empacotamento.api.Services;
 using br.seumanoel.empacotamento.api.Interfaces;
 using br.seumanoel.empacotamento.api.Factorie;
 using Moq;

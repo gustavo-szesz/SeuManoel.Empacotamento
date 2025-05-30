@@ -19,11 +19,5 @@ namespace br.seumanoel.empacotamento.api.Models
             Id = id;
             Products = products;
         }
-
-
-        public bool IsEmpty()
-        {
-            return !Products.Any();
-        }
     }
 }

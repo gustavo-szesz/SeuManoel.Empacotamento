@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
         public string BoxName { get; set; }
+
+        // Observation can be null if, and only if, the box is empty
         public string? Observation { get; set; }
         public int PackingResultId { get; set; }
         public PackingResult PackingResult { get; set; }

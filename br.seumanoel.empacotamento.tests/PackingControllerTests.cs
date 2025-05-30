@@ -2,7 +2,7 @@ using br.seumanoel.empacotamento.api.Controllers;
 using br.seumanoel.empacotamento.api.Data;
 using br.seumanoel.empacotamento.api.Models;
 using br.seumanoel.empacotamento.api.Models.Dto;
-using br.seumanoel.empacotamento.api.Service;
+using br.seumanoel.empacotamento.api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;

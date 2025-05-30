@@ -9,13 +9,16 @@ namespace br.seumanoel.empacotamento.api.Services
 {
     public class AuthService
     {
+        #region Constructor
         private readonly AppDbContext _context;
 
         public AuthService(AppDbContext context)
         {
             _context = context;
         }
+        #endregion
 
+        #region AuthMethod
         public async Task<User?> AuthenticateAsync(string username, string password)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
@@ -31,5 +34,6 @@ namespace br.seumanoel.empacotamento.api.Services
 
             return null;
         }
+        #endregion
     }
 }

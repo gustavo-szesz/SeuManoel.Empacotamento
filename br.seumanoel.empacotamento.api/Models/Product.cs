@@ -34,16 +34,5 @@ namespace br.seumanoel.empacotamento.api.Models
         {
             return Height * Width * Length;
         }
-
-        public void Add(Product product)
-        {
-            if (product == null)
-                throw new ArgumentNullException(nameof(product), "Product cannot be null.");
-            if (product.Id != Id)
-                throw new InvalidOperationException("Cannot add product with different ID.");
-            Height += product.Height;
-            Width += product.Width;
-            Length += product.Length;
-        }
     }
 }
