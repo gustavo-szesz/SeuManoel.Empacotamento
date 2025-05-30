@@ -14,17 +14,15 @@ namespace br.seumanoel.empacotamento.tests
 {
     public class PackingControllerTests
     {
+        #region Constructor and Dependencies
         private readonly PackingService _packingService;
         private readonly AppDbContext _context;
         private readonly PackingController _controller;
 
         public PackingControllerTests()
         {
-            // Create the packing service directly instead of mocking it
-            // If you need to control its behavior, use a mock for IBoxFactory instead
             _packingService = new PackingService(new api.Factorie.BoxFactory());
             
-            // Set up in-memory database for testing
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestPackingDb")
                 .Options;
@@ -37,6 +35,7 @@ namespace br.seumanoel.empacotamento.tests
             // Create the controller with our dependencies
             _controller = new PackingController(_packingService, _context);
         }
+        #endregion
 
         [Fact]
         public async Task PackGroupedOrders_ValidInput_ReturnsOk()
@@ -77,7 +76,6 @@ namespace br.seumanoel.empacotamento.tests
         [Fact]
         public async Task PackGroupedOrders_NullBoxName_HandlesCorrectly()
         {
-            // Arrange
             var input = new OrdersInputDto
             {
                 Orders = new List<OrderDto>
@@ -97,7 +95,6 @@ namespace br.seumanoel.empacotamento.tests
                 }
             };
 
-            // Act
             var result = await _controller.PackGroupedOrders(input);
 
             // Assert

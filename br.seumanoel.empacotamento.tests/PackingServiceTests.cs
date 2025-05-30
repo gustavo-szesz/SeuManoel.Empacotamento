@@ -11,6 +11,7 @@ namespace br.seumanoel.empacotamento.tests
 {
     public class PackingServiceTests
     {
+        #region Constructor and Dependencies
         private readonly PackingService _packingService;
 
         public PackingServiceTests()
@@ -20,6 +21,7 @@ namespace br.seumanoel.empacotamento.tests
             
             _packingService = new PackingService(boxFactory);
         }
+        #endregion
 
         [Fact]
         public void PackOrders_ProductTooLarge_ReturnsNullBox()
