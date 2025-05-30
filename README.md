@@ -21,19 +21,19 @@ Essa aplicação foi desenvolvida como teste técnico para a empresa L2 Code
 ## Checklist de Requisitos para entrega do teste
 
 ### Requisitos Obrigatórios
-- [x] Microserviço em .NET Core ou superior utilizando banco de dados SQL Server
-- [x] Serviço e banco de dados rodam via Docker
-- [x] README.md com pré-requisitos e comandos necessários para rodar a aplicação (docker-compose)
-- [x] API possui Swagger e pode ser testada via Swagger
+- [x] Microserviço em .NET Core ou superior utilizando banco de dados SQL Server - OK
+- [x] Serviço e banco de dados rodam vi - OK
+- [x] README.md com pré-requisitos e comandos necessários para rodar a aplicação (docker-compose) - OK
+- [x] API possui Swagger e pode ser testada via Swagger - OK
   
 
-- [x] Código fonte disponível via repositório no GitHub
+- [x] Código fonte disponível via repositório no GitHub - OK
 
 ### Requisitos Opcionais
-- [x] Segurança na autenticação da API 
-- [x] Testes unitários 
+- [x] Segurança na autenticação da API - OK
+- [x] Testes unitários - OK
   
-![Swagger completo](Images/swagger-completo.png)
+![Swagger completo](Imagens/swagger-completo.png)
 ---
 
 ## Pré-requisitos para rodar a aplicação
@@ -105,10 +105,10 @@ O token tem validade de 1 hora.
 
 Swagger:
 
-![Swagger autentication](Images/swagger-autentication.png)
+![Swagger autentication](Imagens/swagger-autentication.png)
 
 JWT:
-![Swagger JWT](Images/swagger-jwt.png)
+![Swagger JWT](Imagens/swagger-jwt.png)
 
 
 ## Endpoints da API
@@ -149,7 +149,7 @@ JWT:
   }
 ]
 ```
-![swagger-resposta](Images/)
+![swagger-resposta](Imagens/swagger-packing-input-entradajson.png)
 
 ## Algoritmo de Empacotamento
 
