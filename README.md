@@ -1,6 +1,6 @@
 # SeuManoel.Empacotamento - Sistema de Empacotamento de Pedidos
 
-Um serviço de API para otimização de empacotamento de produtos em caixas, desenvolvido para a loja online de Seu Manoel. Este sistema processa pedidos com produtos de diferentes dimensões e determina a melhor forma de embalá-los, usando o algoritmo First Fit Decreasing.
+Um microsservico de API para otimização de empacotamento de produtos em caixas, desenvolvido para a loja online de Seu Manoel. Este sistema processa pedidos com produtos de diferentes dimensões e determina a melhor forma de embalá-los, usando o algoritmo First Fit Decreasing.
 
 ## Índice
 
