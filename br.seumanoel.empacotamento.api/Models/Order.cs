@@ -4,6 +4,8 @@ namespace br.seumanoel.empacotamento.api.Models
 {
     public class Order
     {
+        // JsonPropertyName convert the property name 
+        // to be equal to the name in the example (entrada.json)
         public int Id { get; set; }
 
         [JsonPropertyName("produtos")]

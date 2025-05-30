@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace br.seumanoel.empacotamento.api.Service
+namespace br.seumanoel.empacotamento.api.Services
 {
     public class AuthService
     {

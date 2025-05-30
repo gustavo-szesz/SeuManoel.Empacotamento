@@ -7,6 +7,8 @@ namespace br.seumanoel.empacotamento.api.Models
     /// </summary>
     public class Product
     {
+        // JsonPropertyName convert the property name 
+        // to be equal to the name in the example (entrada.json)
 
         [JsonPropertyName("produto_id")]
         public string Id { get; set; }

@@ -2,7 +2,7 @@
 using br.seumanoel.empacotamento.api.Models;
 using br.seumanoel.empacotamento.api.Models.Dto;
 
-namespace br.seumanoel.empacotamento.api.Service
+namespace br.seumanoel.empacotamento.api.Services
 {
     public class PackingService
     {

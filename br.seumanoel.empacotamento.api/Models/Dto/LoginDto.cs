@@ -7,6 +7,7 @@ namespace br.seumanoel.empacotamento.api.Models.Dto
     /// </summary>
     public class LoginDto
     {
+        
         /// <summary>
         /// Username for authentication
         /// </summary>

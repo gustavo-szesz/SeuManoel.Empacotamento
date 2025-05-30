@@ -2,6 +2,9 @@
 {
     public class Box
     {
+        // The proprieties of Box class (Height, Width, Length, Name)
+        // are going to be parsed to *altura*, *largura* and *comprimento*
+        // in the DTO's, to match the JSON output structure in the example (saida.json)
         public int Height { get; set; }
         public int Width { get; set; }
         public int Length { get; set; }
@@ -21,6 +24,7 @@
             Name = name;
         }
 
+        
         public bool CanHave(Product p)
         {
             return p.Height <= Height &&

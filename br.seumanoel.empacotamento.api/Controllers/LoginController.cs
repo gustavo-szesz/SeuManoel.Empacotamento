@@ -1,6 +1,6 @@
 ﻿using br.seumanoel.empacotamento.api.Models.Dto;
 using br.seumanoel.empacotamento.api.Models.ErrorResponse;
-using br.seumanoel.empacotamento.api.Service;
+using br.seumanoel.empacotamento.api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -12,18 +12,19 @@ namespace br.seumanoel.empacotamento.api.Controllers
 {
     /// <summary>
     /// Controller for handling user login and JWT token generation.
-    /// 
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     [Tags("02-Authentication")]
     public class LoginController : ControllerBase
     {
+        #region Constructor
         /// <summary>
         /// Inicilize instance AuthService
         /// </summary>
         private readonly AuthService _authService;
 
-        #region Constructor
+
         public LoginController(AuthService authService)
         {
             _authService = authService;

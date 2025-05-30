@@ -4,6 +4,8 @@ namespace br.seumanoel.empacotamento.api.Models.Dto
 {
     public class PackedBoxDto
     {
+        // JsonPropertyName convert the property name 
+        // to be equal to the name in the example (entrada.json)
         [JsonPropertyName("caixa_id")]
         public string BoxName { get; set; }
 

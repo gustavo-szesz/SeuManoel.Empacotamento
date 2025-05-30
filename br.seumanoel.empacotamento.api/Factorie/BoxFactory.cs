@@ -4,6 +4,9 @@ using br.seumanoel.empacotamento.api.Models.Enums;
 
 namespace br.seumanoel.empacotamento.api.Factorie
 {
+    /// <summary>
+    /// Factory for creating boxes of different types.
+    /// </summary>
     public class BoxFactory : IBoxFactory
     {
         public Box CreateBox(BoxType boxType)
@@ -17,6 +20,10 @@ namespace br.seumanoel.empacotamento.api.Factorie
             };
         }
 
+        /// <summary>
+        /// Returns a list of all available boxes.
+        /// </summary>
+        /// <returns></returns>
         public List<Box> GetAllBoxes()
         {
             return new List<Box>
