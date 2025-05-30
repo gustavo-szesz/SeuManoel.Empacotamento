@@ -1,10 +1,16 @@
 # SeuManoel.Empacotamento - Sistema de Empacotamento de Pedidos
 
-Um microsservico de API para otimização de empacotamento de produtos em caixas, desenvolvido para a loja online de Seu Manoel. Este sistema processa pedidos com produtos de diferentes dimensões e determina a melhor forma de embalá-los, usando o algoritmo First Fit Decreasing.
+<h3>Descrição</h3>
+Um microserviço de API para otimização de empacotamento de produtos em caixas, desenvolvido para a loja de jogos online do Seu Manoel. Este sistema processa pedidos com produtos de diferentes dimensões (altura, largura e comprimento) e determina a melhor forma de embalá-los
+
+Essa aplicação foi desenvolvida como teste técnico para a empresa L2 Code
+
+
 
 ## Índice
 
-- Pré-requisitos
+- Checklist de Requisitos 
+- Pré-requisitos para rodar a aplicação
 - Instalação e Execução
 - Autenticação
 - Endpoints da API
@@ -12,24 +18,49 @@ Um microsservico de API para otimização de empacotamento de produtos em caixas
 - Estrutura do Projeto
 - Testes
 
-## Pré-requisitos
+## Checklist de Requisitos para entrega do teste
+
+### Requisitos Obrigatórios
+- [x] Microserviço em .NET Core ou superior utilizando banco de dados SQL Server
+- [x] Serviço e banco de dados rodam via Docker
+- [x] README.md com pré-requisitos e comandos necessários para rodar a aplicação (docker-compose)
+- [x] API possui Swagger e pode ser testada via Swagger
+  
+
+- [x] Código fonte disponível via repositório no GitHub
+
+### Requisitos Opcionais
+- [x] Segurança na autenticação da API 
+- [x] Testes unitários 
+  
+![Swagger completo](Images/swagger-completo.png)
+---
+
+## Pré-requisitos para rodar a aplicação
 
 Para executar este projeto, você precisa ter instalado:
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
-Nenhuma instalação adicional é necessária, pois todo o ambiente é configurado em containers.
+Fora o Docker, nenhuma instalação adicional é necessária, o .NET também esta rodando dentro de um Docker.
 
 ## Instalação e Execução
 
 1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/SeuManoel.Empacotamento.git
+   ```powershell
+   git clone https://github.com/gustavo-szesz/SeuManoel.Empacotamento.git
    cd SeuManoel.Empacotamento
    ```
 
-2. Execute o projeto usando Docker Compose:
-   ```bash
+2. Crie o arquivo de variáveis de ambiente:
+   - Copie o arquivo `.env.example` para `.env` na raiz do projeto:
+     ```powershell
+     copy .env.example .env
+     ```
+   - Edite o arquivo `.env` se necessário, ajustando as variáveis conforme seu ambiente.
+
+3. Execute o projeto usando Docker Compose:
+   ```powershell
    docker-compose up -d
    ```
 
@@ -37,22 +68,25 @@ Nenhuma instalação adicional é necessária, pois todo o ambiente é configura
    - Constrói a imagem da aplicação
    - Inicia o SQL Server em um container
    - Inicia a API em outro container
-   - Configura a rede entre os serviços
-   - Executa migrações do banco de dados
+   - Configura a rede entre os serviços (modo bridge)
+   - Executa migração do banco de dados (dotnet ef)
 
-3. A API estará disponível em:
+4. A API estará disponível em:
    ```
-   http://localhost:5274/swagger/index.html
+   http://localhost:5000/swagger/index.html
    ```
 
-4. Para encerrar a aplicação:
-   ```bash
+5. Para encerrar a aplicação:
+   ```powershell
    docker-compose down
    ```
 
+
+
 ## Autenticação
 
-A API usa autenticação JWT para proteger os endpoints. Para utilizar os endpoints protegidos:
+A API usa autenticação JWT para proteger os endpoints e cumprir
+o requisito opcional de segurança na autenticação da API.
 
 1. Primeiro, crie um usuário:
    - Acesse `POST /User` no Swagger
@@ -68,6 +102,14 @@ A API usa autenticação JWT para proteger os endpoints. Para utilizar os endpoi
    - Insira o token no formato: `Bearer {seu-token}`
 
 O token tem validade de 1 hora. 
+
+Swagger:
+
+![Swagger autentication](Images/swagger-autentication.png)
+
+JWT:
+![Swagger JWT](Images/swagger-jwt.png)
+
 
 ## Endpoints da API
 
@@ -102,12 +144,12 @@ O token tem validade de 1 hora.
       {
         "caixa_id": "Caixa 2",
         "produtos": ["PS5", "Volante"],
-        "observacao": null
       }
     ]
   }
 ]
 ```
+![swagger-resposta](Images/)
 
 ## Algoritmo de Empacotamento
 
@@ -122,17 +164,31 @@ Caixas disponíveis:
 - Caixa 2: 80 x 50 x 40
 - Caixa 3: 50 x 80 x 60
 
+
+Para maiores detalhes do algoritmo, veja a explicação em [`br.seumanoel.empacotamento.api/Services/PackingService.cs`](br.seumanoel.empacotamento.api/Services/PackingService.cs).
+
 ## Estrutura do Projeto
 
-- br.seumanoel.empacotamento.api - Projeto principal da API
-  - `Controllers` - Controladores da API
-  - `Models` - Entidades e DTOs
-  - `Services` - Lógica de negócio, incluindo o algoritmo de empacotamento
-  - `Data` - Contexto e configurações do banco de dados
-  - `Factory` - Fábricas de objetos
-  - `Interfaces` - Interfaces para injeção de dependência
+- `br.seumanoel.empacotamento.api/` - Projeto principal da API
+  - `Controllers/` - Controladores da API
+  - `Data/` - Contexto e Seed do banco de dados, ajuda a rodar as migrations na primeira vez executando o SQL Server 
+  - `Factorie/` - Fabrica de objetos
+  - `Interfaces/` - Interfaces para injeção de dependência
+  - `Migrations/` - Migrações do Entity Framework
+  - `Models/` - Entidades, DTOs, Enums (Para a Factory), ErrorResponse (Documentação Swagger) 
+  - `Services/` - Lógica principal, incluindo o algoritmo de empacotamento
+  - `Program.cs` - Configuração principal da aplicação
+  - `Dockerfile` - Dockerfile da API
+  - `entrada.json` / `saida.json` - Exemplos de payload fornecidos pela L2
 
-- br.seumanoel.empacotamento.tests - Projeto de testes unitários
+- `br.seumanoel.empacotamento.tests/` - Projeto de testes unitários
+  - `PackingControllerTests.cs` - Testes dos endpoints da API
+  - `PackingServiceTests.cs` - Testes do algoritmo de empacotamento
+
+- `Images/` - Imagens dos campos do Swagger
+- `docker-compose.yml` - Orquestração dos containers (API e SQL Server)
+- `.env.example` - Exemplo de variáveis de ambiente
+- `README.md` - Guia principal
 
 ## Testes
 
@@ -148,4 +204,3 @@ dotnet test br.seumanoel.empacotamento.tests/br.seumanoel.empacotamento.tests.cs
 
 ---
 
-Desenvolvido como parte do teste técnico para L2 Dev Jr.
